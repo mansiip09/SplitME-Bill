@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="en" data-theme="lavender">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SplitME — Friends Bill Splitter &amp; Settle Board</title>
+    <meta name="description" content="A fun, artistic, and friendly bill &amp; tip splitter for friends dining out. Proceed one by one, enter friends names, and generate individual QR payment scanners!" />
+    <meta property="og:title" content="SplitME — Friends Bill Splitter &amp; Settle Board" />
+    <meta property="og:description" content="Friendly, Pinterest-style dining bill splitter with cartoon doodles, individual friend QR scanners, and debt tracking." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts: Playful & Artistic Calligraphy + Clean Body Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Gaegu:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Shantell+Sans:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet" />
+
+    <!-- Pure CSS Stylesheet (No Tailwind, No External Frameworks) -->
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <!-- Playful Floating Doodle Stickers & Washi Tape Background Elements -->
+    <div class="artistic-bg-layer" aria-hidden="true">
+      <div class="doodle-star star-1">✦</div>
+      <div class="doodle-star star-2">★</div>
+      <div class="doodle-star star-3">✨</div>
+      <div class="doodle-squiggle squiggle-1"></div>
+      <div class="doodle-squiggle squiggle-2"></div>
+      <div class="doodle-flower flower-1">✿</div>
+      <div class="doodle-flower flower-2">🌸</div>
+    </div>
+
+    <!-- Top Bar Navigation (Brand + Corner History & Theme) -->
+    <header class="app-header">
+      <div class="header-container">
+        <!-- Brand Wordmark with Cute Mascot & SVG Logo -->
+        <a href="#" class="brand-link" id="brandHomeLink" aria-label="SplitME Home">
+          <div class="brand-logo-mark">
+            <svg class="brand-icon-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <!-- Cute Cartoon Wallet Base with smiling face -->
+              <rect x="3" y="10" width="30" height="24" rx="7" fill="#8B5CF6" />
+              <rect x="7" y="6" width="26" height="7" rx="3.5" fill="#DDD6FE" />
+              <!-- Receipt peeking out -->
+              <path d="M12 4H24V14L20 12L16 14L12 12V4Z" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1.5" />
+              <line x1="15" y1="7" x2="21" y2="7" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round" />
+              <!-- Cute cartoon smiling eyes & blush -->
+              <circle cx="13" cy="20" r="2" fill="#FFFFFF" />
+              <circle cx="23" cy="20" r="2" fill="#FFFFFF" />
+              <circle cx="10" cy="24" r="2" fill="#F472B6" opacity="0.6" />
+              <circle cx="26" cy="24" r="2" fill="#F472B6" opacity="0.6" />
+              <path d="M16 23C16.8 24.5 19.2 24.5 20 23" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" />
+              <!-- Golden coin sparkle -->
+              <circle cx="31" cy="22" r="4.5" fill="#FBBF24" stroke="#F59E0B" stroke-width="1.5" />
+              <text x="29" y="24" font-size="6" font-weight="bold" fill="#78350F">$</text>
+            </svg>
+          </div>
+          <div class="brand-text-lockup">
+            <div class="brand-title-wrap">
+              <span class="brand-name">SplitME</span>
+              <span class="brand-hand-tag">★ squad settle</span>
+            </div>
+            <span class="brand-tagline">Simple splits, happy moments.</span>
+          </div>
+        </a>
+
+        <!-- Header Actions: Multi-Theme Switcher & History Drawer at Top Corner -->
+        <div class="header-actions">
+          <!-- Multi-Theme Palette Picker -->
+          <div class="theme-picker-wrapper" id="themePickerWrapper">
+            <button type="button" class="btn-theme-pill" id="themeToggleBtn" aria-label="Choose theme palette" title="Choose aesthetic Pinterest theme">
+              <span class="theme-icon-indicator" id="themeIconIndicator" aria-hidden="true">🎨</span>
+              <span class="theme-btn-text" id="themeModeLabel">Lavender</span>
+              <span class="theme-arrow-icon">▾</span>
+            </button>
+            <div class="theme-dropdown-menu hidden" id="themeDropdownMenu" role="menu">
+              <button type="button" class="theme-option-btn active" data-theme-id="lavender">
+                <span class="theme-color-dot dot-lavender"></span>
+                <span>Dreamy Lavender 💜</span>
+              </button>
+              <button type="button" class="theme-option-btn" data-theme-id="strawberry">
+                <span class="theme-color-dot dot-strawberry"></span>
+                <span>Strawberry Milk 🌸</span>
+              </button>
+              <button type="button" class="theme-option-btn" data-theme-id="matcha">
+                <span class="theme-color-dot dot-matcha"></span>
+                <span>Matcha Garden 🍵</span>
+              </button>
+              <button type="button" class="theme-option-btn" data-theme-id="honey">
+                <span class="theme-color-dot dot-honey"></span>
+                <span>Honey Butter 🍯</span>
+              </button>
+              <button type="button" class="theme-option-btn" data-theme-id="sky">
+                <span class="theme-color-dot dot-sky"></span>
+                <span>Sky Breeze 🌊</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- History & Debts Ledger Trigger Button -->
+          <button type="button" class="btn-history-polaroid" id="openHistoryBtn" aria-label="Open split history and debt ledger">
+            <svg class="header-btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="18" height="18" x="3" y="3" rx="4" ry="4"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="9" y1="21" x2="9" y2="9"></line>
+            </svg>
+            <span class="history-btn-text">Debts &amp; History</span>
+            <span class="badge-count" id="historyCountBadge">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="main-layout">
+      <!-- Fun Cartoon Hero Showcase Banner with Pinterest Scrapbook Style -->
+      <section class="scrapbook-hero-banner" aria-label="Fun dinner split introduction">
+        <div class="washi-tape washi-top-left" aria-hidden="true"></div>
+        <div class="washi-tape washi-top-right" aria-hidden="true"></div>
+        
+        <div class="hero-left-col">
+          <div class="hero-sticker-badge">
+            <span class="sticker-emoji">🍕</span>
+            <span class="sticker-text">Dinner's done! Let's settle up</span>
+          </div>
+          <h1 class="hero-headline">The Friendly Friends Bill Splitter</h1>
+          <p class="hero-subhead">
+            No boring spreadsheets! Enter your crew, scan the bill, and get <strong>individual instant QR scanners</strong> so everyone settles their share on the spot!
+          </p>
+          <div class="hero-fun-tags">
+            <span class="fun-tag">✨ 100% Fair Math</span>
+            <span class="fun-tag">📸 Receipt Auto-Reader</span>
+            <span class="fun-tag">⚡ Personal QR Scanners</span>
+            <span class="fun-tag">💛 Zero Awkwardness</span>
+          </div>
+        </div>
+
+        <div class="hero-right-col">
+          <!-- Cartoon Friends Dining Illustration in Polaroid Frame -->
+          <div class="polaroid-frame polaroid-hero">
+            <div class="polaroid-pin" aria-hidden="true">📌</div>
+            <div class="polaroid-img-box">
+              <img
+                src="/src/assets/images/pinterest_friends_cartoon_1791091753431.jpg"
+                alt="Cute cartoon friends happily eating dinner together"
+                class="polaroid-img"
+                referrerpolicy="no-referrer"
+              />
+            </div>
+            <div class="polaroid-caption">Good food + Best friends = Happy vibes 💖</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step-by-Step ("Proceed One by One") Progress Ribbon -->
+      <nav class="step-progress-nav" aria-label="Bill splitting steps">
+        <div class="step-progress-bar-track">
+          <div class="step-progress-bar-fill" id="stepProgressFill"></div>
+        </div>
+        <div class="step-progress-buttons">
+          <button type="button" class="step-progress-item active" data-step="1" id="stepIndicator1">
+            <div class="step-bubble">
+              <span class="step-bubble-num">1</span>
+              <span class="step-bubble-icon">🧾</span>
+            </div>
+            <span class="step-label">Feast &amp; Bill</span>
+          </button>
+
+          <button type="button" class="step-progress-item" data-step="2" id="stepIndicator2">
+            <div class="step-bubble">
+              <span class="step-bubble-num">2</span>
+              <span class="step-bubble-icon">👯</span>
+            </div>
+            <span class="step-label">The Squad</span>
+          </button>
+
+          <button type="button" class="step-progress-item" data-step="3" id="stepIndicator3">
+            <div class="step-bubble">
+              <span class="step-bubble-num">3</span>
+              <span class="step-bubble-icon">✨</span>
+            </div>
+            <span class="step-label">Tip &amp; Pay Way</span>
+          </button>
+
+          <button type="button" class="step-progress-item" data-step="4" id="stepIndicator4">
+            <div class="step-bubble">
+              <span class="step-bubble-num">4</span>
+              <span class="step-bubble-icon">📱</span>
+            </div>
+            <span class="step-label">Scanners &amp; Settle</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Interactive Step Wizard Cards (Proceed One By One) -->
+      <div class="wizard-container">
+
+        <!-- ================================================================
+             STEP 1: THE FEAST & RECEIPT DETAILS
+             ================================================================ -->
+        <section class="wizard-step-card active" id="wizardStep1" aria-labelledby="step1Title">
+          <div class="washi-tape washi-step-card" aria-hidden="true"></div>
+          
+          <div class="step-card-header">
+            <div class="step-header-text">
+              <span class="step-badge-counter">Step 1 of 4</span>
+              <h2 class="step-card-title" id="step1Title">What was the feast? 🍕</h2>
+              <p class="step-card-desc">Type your occasion and amount, or snap a photo of the restaurant receipt!</p>
+            </div>
+            <div class="header-mascot-sticker">
+              <img
+                src="/src/assets/images/cute_cat_bill_cartoon_1791091782649.jpg"
+                alt="Cute cartoon cat with receipt"
+                class="mascot-avatar-small"
+                referrerpolicy="no-referrer"
+              />
+            </div>
+          </div>
+
+          <!-- Receipt Scanner / Dropzone Area -->
+          <div class="artistic-scanner-box">
+            <div class="scanner-header-bar">
+              <div class="scanner-title-group">
+                <span class="scanner-icon">📸</span>
+                <span class="scanner-heading">Smart Receipt Scanner</span>
+              </div>
+              <div class="scanner-sample-links">
+                <span class="sample-label">Try Demo:</span>
+                <button type="button" class="demo-chip-btn" data-sample="pizza">🍕 Pizza Party ($94.50)</button>
+                <button type="button" class="demo-chip-btn" data-sample="sushi">🍣 Sushi Night ($148.00)</button>
+                <button type="button" class="demo-chip-btn" data-sample="tacos">🌮 Taco Tuesday ($52.00)</button>
+              </div>
+            </div>
+
+            <!-- Upload Dropzone Area -->
+            <div class="receipt-dropzone-interactive" id="receiptDropzone" tabindex="0" role="button" aria-label="Upload or take photo of receipt">
+              <input type="file" id="receiptFileInput" accept="image/*" class="sr-only" />
+              
+              <div class="dropzone-unloaded" id="dropzoneEmptyView">
+                <div class="dropzone-animated-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                    <circle cx="9" cy="9" r="2"></circle>
+                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+                  </svg>
+                </div>
+                <div class="dropzone-copy">
+                  <span class="dropzone-prompt">Drop receipt photo here or click to browse</span>
+                  <span class="dropzone-subtext">Auto-detects occasion name, bill total, and dining items!</span>
+                </div>
+              </div>
+
+              <!-- Loaded Receipt Preview -->
+              <div class="dropzone-loaded hidden" id="dropzonePreviewView">
+                <div class="preview-polaroid">
+                  <img id="receiptPreviewImg" src="" alt="Uploaded receipt photo" class="preview-img" />
+                  <div class="laser-scanner" id="laserScannerLine"></div>
+                </div>
+                <div class="preview-meta">
+                  <div class="preview-meta-top">
+                    <span class="preview-badge-status">Receipt Scanned! ✨</span>
+                    <button type="button" class="btn-clear-receipt" id="removeReceiptBtn" title="Remove receipt">✕ Remove</button>
+                  </div>
+                  <div class="preview-extracted-items" id="previewExtractedList">
+                    <!-- Dynamic recognized receipt items -->
+                  </div>
+                  <button type="button" class="btn-apply-receipt" id="applyReceiptBtn">
+                    ✨ Fill Form with this Bill
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Occasion Name & Currency Inputs -->
+          <div class="step-form-grid">
+            <!-- Occasion Input with Calligraphy Live Preview -->
+            <div class="form-group-artistic">
+              <div class="form-label-row">
+                <label for="occasionInput" class="artistic-label">
+                  🎉 Occasion or Restaurant <span class="required-asterisk">*</span>
+                </label>
+                <span class="label-helper-hint">Handwritten on receipt</span>
+              </div>
+              <div class="input-container">
+                <span class="input-prefix-icon">✍️</span>
+                <input
+                  type="text"
+                  id="occasionInput"
+                  class="artistic-input"
+                  placeholder="e.g. Bella Pizza Feast, Friday Boba Night, Tapas &amp; Wine"
+                  maxlength="50"
+                  autocomplete="off"
+                  required
+                />
+                <button type="button" class="btn-input-clear hidden" id="clearOccasionBtn" aria-label="Clear occasion">×</button>
+              </div>
+              <div class="calligraphy-preview-bar">
+                <span class="preview-mini-label">Calligraphy Preview:</span>
+                <span class="calligraphy-preview-text" id="calligraphyLivePreview">Bella Pizza Feast</span>
+              </div>
+              <div class="error-bubble hidden" id="errorOccasion">Please write an occasion or restaurant name!</div>
+            </div>
+
+            <!-- Bill Total & Multi-Currency Selection -->
+            <div class="form-row-duo">
+              <!-- Bill Amount Input -->
+              <div class="form-group-artistic flex-1">
+                <div class="form-label-row">
+                  <label for="billAmountInput" class="artistic-label">
+                    💰 Total Bill Amount <span class="required-asterisk">*</span>
+                  </label>
+                </div>
+                <div class="input-container">
+                  <span class="input-prefix-icon currency-indicator" id="currencySymbolDisplay">$</span>
+                  <input
+                    type="number"
+                    id="billAmountInput"
+                    class="artistic-input"
+                    placeholder="0.00"
+                    min="0.01"
+                    step="0.01"
+                    required
+                  />
+                  <button type="button" class="btn-input-clear hidden" id="clearBillAmountBtn" aria-label="Clear bill amount">×</button>
+                </div>
+                <div class="error-bubble hidden" id="errorBillAmount">Please enter a valid bill amount greater than 0!</div>
+              </div>
+
+              <!-- Different Types of Currency Selector -->
+              <div class="form-group-artistic currency-box-wrap">
+                <div class="form-label-row">
+                  <label for="currencySelect" class="artistic-label">🌍 Currency</label>
+                </div>
+                <div class="select-container">
+                  <select id="currencySelect" class="artistic-select">
+                    <option value="$" selected>USD ($)</option>
+                    <option value="€">EUR (€)</option>
+                    <option value="£">GBP (£)</option>
+                    <option value="₹">INR (₹)</option>
+                    <option value="¥">JPY / CNY (¥)</option>
+                    <option value="C$">CAD (C$)</option>
+                    <option value="A$">AUD (A$)</option>
+                    <option value="S$">SGD (S$)</option>
+                    <option value="₩">KRW (₩)</option>
+                    <option value="CHF">CHF (Fr)</option>
+                    <option value="AED">AED (د.إ)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 1 Footer Navigation -->
+          <div class="step-nav-footer">
+            <button type="button" class="btn-doodle-secondary" id="resetStep1Btn">
+              🔄 Reset Details
+            </button>
+            <button type="button" class="btn-doodle-primary" id="goToStep2Btn">
+              Next: Enter Friends Names 👯 ➡️
+            </button>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             STEP 2: THE DINING SQUAD (FRIENDS NAMES & AVATARS)
+             ================================================================ -->
+        <section class="wizard-step-card hidden" id="wizardStep2" aria-labelledby="step2Title">
+          <div class="washi-tape washi-step-card" aria-hidden="true"></div>
+
+          <div class="step-card-header">
+            <div class="step-header-text">
+              <span class="step-badge-counter">Step 2 of 4</span>
+              <h2 class="step-card-title" id="step2Title">Who's in the dining squad? 👯‍♀️</h2>
+              <p class="step-card-desc">Type the names of your friends so each person gets their personalized split card and QR scanner!</p>
+            </div>
+            <div class="header-mascot-sticker">
+              <img
+                src="/src/assets/images/cartoon_food_stickers_1791091770623.jpg"
+                alt="Cartoon food stickers"
+                class="mascot-avatar-small"
+                referrerpolicy="no-referrer"
+              />
+            </div>
+          </div>
+
+          <!-- Add Friend Fast Form -->
+          <div class="add-friend-control-panel">
+            <div class="input-container flex-1">
+              <span class="input-prefix-icon">👤</span>
+              <input
+                type="text"
+                id="newFriendNameInput"
+                class="artistic-input"
+                placeholder="Type friend's name (e.g. Maya, Alex, Jordan, Sarah...)"
+                maxlength="25"
+                autocomplete="off"
+              />
+            </div>
+            <button type="button" class="btn-doodle-primary" id="quickAddFriendBtn">
+              + Add to Squad
+            </button>
+          </div>
+
+          <!-- Split Mode Selector (Equal vs Custom Portion) -->
+          <div class="split-mode-ribbon">
+            <span class="split-mode-label">How are we splitting?</span>
+            <div class="split-mode-buttons">
+              <button type="button" class="mode-tab-btn active" data-mode="equal" id="modeEqualBtn">
+                🍕 Split Equally (Equal Share)
+              </button>
+              <button type="button" class="mode-tab-btn" data-mode="custom" id="modeCustomBtn">
+                🥗 Custom Items / Unequal Share
+              </button>
+            </div>
+          </div>
+
+          <!-- Friends List Card Grid -->
+          <div class="friends-squad-grid" id="friendsSquadGrid">
+            <!-- Rendered dynamically via JavaScript -->
+          </div>
+
+          <div class="squad-counter-summary" id="squadCounterSummary">
+            <span>✨ <strong>4 friends</strong> in the squad right now!</span>
+          </div>
+
+          <!-- Step 2 Footer Navigation -->
+          <div class="step-nav-footer">
+            <button type="button" class="btn-doodle-secondary" id="backToStep1Btn">
+              ⬅️ Back: Feast Details
+            </button>
+            <button type="button" class="btn-doodle-primary" id="goToStep3Btn">
+              Next: Tip the Staff &amp; Settle Way ✨ ➡️
+            </button>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             STEP 3: TIP THE STAFF & PAYMENT METHOD CONFIGURATION
+             ================================================================ -->
+        <section class="wizard-step-card hidden" id="wizardStep3" aria-labelledby="step3Title">
+          <div class="washi-tape washi-step-card" aria-hidden="true"></div>
+
+          <div class="step-card-header">
+            <div class="step-header-text">
+              <span class="step-badge-counter">Step 3 of 4</span>
+              <h2 class="step-card-title" id="step3Title">Service Tip &amp; How We Settle ✨</h2>
+              <p class="step-card-desc">Pick a tip for good service and specify where friends should send their money!</p>
+            </div>
+          </div>
+
+          <!-- Tip Selection with Fun Cartoon Vibes -->
+          <div class="tip-selection-artistic">
+            <div class="tip-section-header">
+              <span class="artistic-label">🍽️ Server Tip Percentage</span>
+              <span class="tip-calculated-pill" id="tipCalculatedDisplay">Tip Total: $14.18</span>
+            </div>
+
+            <div class="tip-cards-row" role="radiogroup" aria-label="Tip selection options">
+              <button type="button" class="tip-option-card" data-tip="0">
+                <span class="tip-card-emoji">🙅</span>
+                <span class="tip-card-percent">0%</span>
+                <span class="tip-card-text">No tip</span>
+              </button>
+              <button type="button" class="tip-option-card" data-tip="10">
+                <span class="tip-card-emoji">😊</span>
+                <span class="tip-card-percent">10%</span>
+                <span class="tip-card-text">Good</span>
+              </button>
+              <button type="button" class="tip-option-card active" data-tip="15">
+                <span class="tip-card-emoji">😋</span>
+                <span class="tip-card-percent">15%</span>
+                <span class="tip-card-text">Great</span>
+              </button>
+              <button type="button" class="tip-option-card" data-tip="18">
+                <span class="tip-card-emoji">💖</span>
+                <span class="tip-card-percent">18%</span>
+                <span class="tip-card-text">Super</span>
+              </button>
+              <button type="button" class="tip-option-card" data-tip="20">
+                <span class="tip-card-emoji">🚀</span>
+                <span class="tip-card-percent">20%</span>
+                <span class="tip-card-text">Chef's Kiss</span>
+              </button>
+              <div class="custom-tip-card">
+                <span class="custom-tip-label">Custom %</span>
+                <input
+                  type="number"
+                  id="customTipInput"
+                  class="custom-tip-input"
+                  placeholder="%"
+                  min="0"
+                  max="100"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Host Payer Handle Configuration (Venmo, UPI, PayPal, etc.) -->
+          <div class="host-payment-box">
+            <div class="host-payment-header">
+              <span class="artistic-label">💳 Payer's UPI ID / Payment Handle</span>
+              <span class="label-helper-hint">Generates 100% Working Scannable QR Codes!</span>
+            </div>
+            <p class="host-payment-desc">
+              Who paid the feast? Enter your real <strong>UPI ID</strong> (Google Pay, PhonePe, Paytm, BHIM) so your friends' phones can scan and settle directly into your bank account:
+            </p>
+            <div class="input-container">
+              <span class="input-prefix-icon">📱</span>
+              <input
+                type="text"
+                id="hostPaymentHandleInput"
+                class="artistic-input"
+                placeholder="e.g. yourname@oksbi, 9876543210@paytm, or username@okhdfcbank"
+                autocomplete="off"
+              />
+            </div>
+            <div class="upi-format-indicator" id="step3UpiFormatIndicator">
+              <span class="status-indicator-text">💡 Tip: Enter your real registered UPI ID (e.g. mobile@paytm or name@oksbi)</span>
+            </div>
+            <div class="quick-handle-hints">
+              <span class="hint-label">Quick Bank Suffixes:</span>
+              <button type="button" class="hint-chip-btn" data-suffix="@oksbi">+ @oksbi</button>
+              <button type="button" class="hint-chip-btn" data-suffix="@paytm">+ @paytm</button>
+              <button type="button" class="hint-chip-btn" data-suffix="@okhdfcbank">+ @okhdfcbank</button>
+              <button type="button" class="hint-chip-btn" data-suffix="@ybl">+ @ybl</button>
+              <button type="button" class="hint-chip-btn" data-suffix="@okaxis">+ @okaxis</button>
+              <button type="button" class="hint-chip-btn" data-suffix="@okicici">+ @okicici</button>
+            </div>
+          </div>
+
+          <!-- Step 3 Footer Navigation -->
+          <div class="step-nav-footer">
+            <button type="button" class="btn-doodle-secondary" id="backToStep2Btn">
+              ⬅️ Back: The Squad
+            </button>
+            <button type="button" class="btn-doodle-primary" id="goToStep4Btn">
+              Next: View Settle Board &amp; Scanners! 📱 ➡️
+            </button>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             STEP 4: THE GRAND SETTLE BOARD & INDIVIDUAL SCANNERS FOR EACH FRIEND
+             ================================================================ -->
+        <section class="wizard-step-card hidden" id="wizardStep4" aria-labelledby="step4Title">
+          <div class="washi-tape washi-step-card" aria-hidden="true"></div>
+
+          <!-- Grand Scrapbook Receipt Board Header -->
+          <div class="settle-board-header">
+            <div class="occasion-banner-polaroid">
+              <div class="washi-tape washi-mini-center" aria-hidden="true"></div>
+              <span class="occasion-sticker-kicker">★ Dining Receipt &amp; Settle Board ★</span>
+              <h2 class="occasion-script-display" id="finalOccasionTitle">Bella Pizza Feast</h2>
+              <div class="occasion-meta-stamp" id="finalOccasionMeta">Oct 3, 2026 · Split with 4 Friends</div>
+            </div>
+          </div>
+
+          <!-- Big Summary Highlights -->
+          <div class="settle-stats-overview">
+            <div class="stat-bubble-item">
+              <span class="stat-bubble-label">Total Grand Bill</span>
+              <span class="stat-bubble-val" id="finalGrandTotalVal">$108.68</span>
+              <span class="stat-bubble-sub" id="finalBaseAndTipVal">Base $94.50 + Tip $14.18</span>
+            </div>
+
+            <div class="stat-bubble-item stat-bubble-accent">
+              <span class="stat-bubble-label">Standard Share Per Person</span>
+              <span class="stat-bubble-val highlight-color" id="finalPerPersonVal">$27.17</span>
+              <span class="stat-bubble-sub">Across <span id="finalSquadCount">4</span> friends</span>
+            </div>
+
+            <div class="stat-bubble-item">
+              <span class="stat-bubble-label">Squad Settled Status</span>
+              <span class="stat-bubble-val" id="finalSettledProgressVal">0 / 4 Paid</span>
+              <span class="stat-bubble-sub" id="finalUnpaidReminderVal">All shares pending</span>
+            </div>
+          </div>
+
+          <!-- Live Payer UPI Configuration & Verification Card -->
+          <div class="payer-upi-setup-card" id="step4PayerUpiCard">
+            <div class="payer-upi-top-row">
+              <div class="payer-upi-info">
+                <span class="upi-live-tag">⚡ Live UPI Scanner Engine</span>
+                <h3 class="payer-upi-title">📱 Receive Payments in Your Bank Account</h3>
+                <p class="payer-upi-desc">
+                  Enter your real <strong>UPI ID</strong> below. All friend QR codes below update instantly so Google Pay, PhonePe, Paytm, and BHIM can verify your account and process payments:
+                </p>
+              </div>
+              <div class="scanner-mode-toggle-group">
+                <span class="mode-toggle-label">QR Format:</span>
+                <div class="mode-toggle-pills">
+                  <button type="button" class="btn-mode-pill active" id="btnModeUpi" data-mode="upi" title="Standard NPCI UPI QR for Indian UPI apps">
+                    🇮🇳 UPI App
+                  </button>
+                  <button type="button" class="btn-mode-pill" id="btnModeWeb" data-mode="web" title="Universal Web Invoice link scannable by any mobile camera / iPhone">
+                    🌐 Web Link
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Real-time UPI Input & Apply Button -->
+            <div class="payer-upi-input-group">
+              <div class="input-container flex-1">
+                <span class="input-prefix-icon">💳</span>
+                <input
+                  type="text"
+                  id="step4UpiHandleInput"
+                  class="artistic-input"
+                  placeholder="e.g. yourname@oksbi, 9876543210@paytm, name@okhdfcbank"
+                  autocomplete="off"
+                />
+              </div>
+              <button type="button" class="btn-doodle-primary" id="btnApplyStep4Upi">
+                ⚡ Update All QR Codes
+              </button>
+            </div>
+
+            <!-- Quick Suffix Helper Chips -->
+            <div class="quick-handle-hints">
+              <span class="hint-label">Quick Add Suffix:</span>
+              <button type="button" class="hint-chip-btn chip-step4" data-suffix="@oksbi">+ @oksbi</button>
+              <button type="button" class="hint-chip-btn chip-step4" data-suffix="@paytm">+ @paytm</button>
+              <button type="button" class="hint-chip-btn chip-step4" data-suffix="@okhdfcbank">+ @okhdfcbank</button>
+              <button type="button" class="hint-chip-btn chip-step4" data-suffix="@ybl">+ @ybl</button>
+              <button type="button" class="hint-chip-btn chip-step4" data-suffix="@okaxis">+ @okaxis</button>
+              <button type="button" class="hint-chip-btn chip-step4" data-suffix="@okicici">+ @okicici</button>
+            </div>
+
+            <!-- Real-time Validation Status Badge -->
+            <div class="upi-format-status-badge valid" id="step4UpiStatusBadge">
+              <span>✅ UPI QR Verified &amp; Ready for Google Pay, PhonePe, Paytm, BHIM &amp; Cameras</span>
+            </div>
+          </div>
+
+          <!-- Section: Individual QR Scanners for EACH Friend -->
+          <div class="individual-scanners-section">
+            <div class="scanners-title-box">
+              <div class="scanners-icon-wrap">📱</div>
+              <div>
+                <h3 class="scanners-section-title">Individual Scanners for Each Friend</h3>
+                <p class="scanners-section-desc">
+                  Each friend has their own dedicated QR scanner card with their exact split amount! Hold up your phone to scan and pay.
+                </p>
+              </div>
+            </div>
+
+            <!-- Dynamic Container for Each Friend's Scanner Card -->
+            <div class="friend-scanners-grid" id="friendScannersGrid">
+              <!-- Rendered via JavaScript -->
+            </div>
+          </div>
+
+          <!-- Quick Actions & Sharing Group Bar -->
+          <div class="settle-board-actions-tray">
+            <button type="button" class="btn-doodle-primary flex-1" id="copyGroupSummaryBtn">
+              📋 Copy Chat Summary (WhatsApp / SMS)
+            </button>
+            <button type="button" class="btn-doodle-secondary" id="saveSplitToHistoryBtn">
+              💾 Save to Split History
+            </button>
+            <button type="button" class="btn-doodle-secondary" id="restartNewSplitBtn">
+              ✨ Start New Split
+            </button>
+          </div>
+
+          <!-- Step 4 Footer Navigation -->
+          <div class="step-nav-footer">
+            <button type="button" class="btn-doodle-secondary" id="backToStep3Btn">
+              ⬅️ Edit Tip &amp; Squad
+            </button>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Slide-over Drawer: Past Billing Splits & Debt Ledger -->
+    <aside class="drawer-overlay hidden" id="historyDrawerOverlay" aria-modal="true" role="dialog" aria-labelledby="drawerTitle">
+      <div class="drawer-panel" id="drawerPanel">
+        <div class="drawer-header">
+          <div class="drawer-header-title-box">
+            <h2 class="drawer-title" id="drawerTitle">📒 Scrapbook History &amp; Debts</h2>
+            <p class="drawer-subtitle">Track past feasts, settled friends, and outstanding debts</p>
+          </div>
+          <button type="button" class="btn-icon-close" id="closeHistoryDrawerBtn" aria-label="Close drawer">✕</button>
+        </div>
+
+        <!-- Drawer Navigation Tabs -->
+        <div class="drawer-tabs">
+          <button type="button" class="drawer-tab active" id="tabPastSplitsBtn">
+            Past Feasts (<span id="pastBillsCount">0</span>)
+          </button>
+          <button type="button" class="drawer-tab" id="tabDebtsLedgerBtn">
+            Unsettled Debts (<span id="unsettledDebtsCount">0</span>)
+          </button>
+        </div>
+
+        <div class="drawer-content">
+          <!-- View 1: Past Bills List -->
+          <div class="drawer-view" id="viewPastSplits">
+            <div class="drawer-empty-state hidden" id="emptyPastSplitsState">
+              <div class="empty-icon-wrap">🍽️</div>
+              <p class="empty-title">No past bill splits recorded yet</p>
+              <p class="empty-desc">When you finish splitting a bill, click "Save to Split History" to pin it in your memory journal.</p>
+            </div>
+            <div class="history-cards-container" id="historyCardsList">
+              <!-- Rendered via JavaScript -->
+            </div>
+          </div>
+
+          <!-- View 2: Debts Ledger -->
+          <div class="drawer-view hidden" id="viewDebtsLedger">
+            <div class="debt-summary-banner" id="debtSummaryBanner">
+              <span class="debt-banner-label">Total Outstanding Debts</span>
+              <span class="debt-banner-val" id="totalOutstandingDebtsVal">$0.00</span>
+            </div>
+            <div class="drawer-empty-state hidden" id="emptyDebtsState">
+              <div class="empty-icon-wrap">🎉</div>
+              <p class="empty-title">All settled up! No debts!</p>
+              <p class="empty-desc">Every single friend has paid their share across all saved splits. High five!</p>
+            </div>
+            <div class="debts-cards-container" id="debtsList">
+              <!-- Rendered via JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <div class="drawer-footer">
+          <button type="button" class="btn-ghost-danger" id="clearAllHistoryBtn">
+            🗑️ Clear All Saved History
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Modal: Enlarged QR Scanner Preview -->
+    <div class="modal-overlay hidden" id="scannerZoomModal" role="dialog" aria-modal="true" aria-labelledby="zoomModalTitle">
+      <div class="modal-box modal-polaroid-box">
+        <div class="washi-tape washi-modal-tape" aria-hidden="true"></div>
+        <div class="modal-header">
+          <div class="modal-friend-avatar" id="zoomModalAvatar">🍕</div>
+          <div class="modal-header-titles">
+            <h3 class="modal-title" id="zoomModalTitle">Friend's UPI Payment Scanner</h3>
+            <span class="modal-subtitle" id="zoomModalSubtitle">Scan with any UPI app to settle instantly</span>
+          </div>
+          <button type="button" class="btn-icon-close" id="closeZoomModalBtn" aria-label="Close modal">✕</button>
+        </div>
+        <div class="modal-body text-center">
+          <div class="qr-canvas-zoom-wrapper">
+            <canvas id="zoomQrCanvas" width="280" height="280" class="zoom-qr-canvas"></canvas>
+            <img id="zoomQrImg" class="zoom-qr-img" src="" alt="Enlarged Verified UPI QR Code" />
+          </div>
+          <div class="zoom-amount-display" id="zoomAmountDisplay">₹0.00</div>
+          <div class="zoom-vpa-pill" id="zoomVpaPill">
+            <span class="vpa-label">Payee UPI ID:</span>
+            <strong id="zoomNoteDisplay">yourname@oksbi</strong>
+          </div>
+          <div class="qr-upi-verified-badge" id="zoomVerifiedBadge">
+            <span>✅ Official NPCI Standard UPI QR · Works with GPay, PhonePe, Paytm, BHIM</span>
+          </div>
+          <p class="zoom-scanner-hint">
+            💡 Scanning with PhonePe / Google Pay? Ensure the payee UPI ID above is your real registered account so your bank can receive it.
+          </p>
+        </div>
+        <div class="modal-footer flex-column">
+          <a href="#" class="btn-doodle-primary btn-block text-center" id="zoomOpenUpiLink">
+            ⚡ Open in UPI App (GPay / PhonePe / Paytm)
+          </a>
+          <div class="modal-btn-row">
+            <button type="button" class="btn-doodle-secondary flex-1" id="copyZoomLinkBtn">
+              📋 Copy Payment Link
+            </button>
+            <button type="button" class="btn-doodle-secondary flex-1" id="copyZoomUpiIdBtn">
+              💳 Copy UPI ID
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirm Modal (e.g. for Reset / Clear) -->
+    <div class="modal-overlay hidden" id="confirmModalOverlay" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
+      <div class="modal-box modal-box-sm">
+        <div class="modal-header">
+          <h3 class="modal-title" id="confirmModalTitle">Confirm</h3>
+          <button type="button" class="btn-icon-close" id="closeConfirmModalBtn" aria-label="Close modal">✕</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-desc" id="confirmModalText">Are you sure?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-doodle-secondary" id="cancelConfirmBtn">Cancel</button>
+          <button type="button" class="btn-danger-artistic" id="actionConfirmBtn">Proceed</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+    <!-- Pure Modular Vanilla JavaScript -->
+    <script type="module" src="/src/app.js"></script>
+  </body>
+</html>

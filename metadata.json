@@ -1,0 +1,6 @@
+{
+  "name": "SplitME - Bill & Tip Splitter",
+  "description": "Fast bill splitting and tip calculator for groups and friends after dining out, with receipt scanning, debt tracking, and multiple payment methods.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
