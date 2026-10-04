@@ -1,0 +1,1 @@
+SplitBill is a user-friendly application designed to simplify bill splitting after dinners, parties, and other social occasions. It allows users to easily divide expenses among multiple people, ensuring accurate calculations and making it convenient to track individual contributions.
